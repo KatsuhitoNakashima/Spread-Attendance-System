@@ -11,13 +11,25 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
     # 出勤時間が未登録であることを判定します。
     if @attendance.started_at.nil?
-      if @attendance.update_attributes(started_at: Time.current.change(sec: 0))
+      if @attendance.update_attributes(started_at: Time.current.round_to( 15.minutes))
         flash[:info] = "おはようございます！"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
+    elsif @attendance.rest_in_at.nil?
+      if  @attendance.update_attributes(rest_in_at: Time.current.round_to( 15.minutes))
+        flash[:info] ="ゆっくり休憩してください。"
+      else
+        flash[:danger] = UPDATE_ERROR_MSG
+      end
+    elsif @attendance.rest_out_at.nil?
+      if  @attendance.update_attributes(rest_out_at: Time.current.round_to( 15.minutes))
+        flash[:info] ="休憩から上がりました。"
+      else
+        flash[:danger] = UPDATE_ERROR_MSG
+      end
     elsif @attendance.finished_at.nil?
-      if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
+      if @attendance.update_attributes(finished_at: Time.current.round_to( 15.minutes))
         flash[:info] = "お疲れ様でした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
@@ -46,7 +58,7 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :rest_in_at, :rest_out_at, :note])[:attendances]
     end
     
     # beforeフィルター

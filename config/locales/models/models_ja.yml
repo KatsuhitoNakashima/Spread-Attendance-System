@@ -19,5 +19,7 @@ ja:
           worked_on: 日付
           started_at: 出勤時間
           finished_at: 退勤時間
+          rest_in_at: 休憩入り時間
+          rest_out_at: 休憩戻り時間
           note: 備考
           user: ユーザーID

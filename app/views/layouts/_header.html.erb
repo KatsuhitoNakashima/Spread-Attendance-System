@@ -1,11 +1,13 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
-    <%= link_to "Attendance App", root_path, id: "logo" %>
+    <%= link_to "Spread勤怠管理", root_path, id: "logo" %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "ホーム", root_path %></li>
         <% if logged_in? %>
-          <li><%= link_to "全てのユーザー", users_path %></li>
+          <%  if current_user.admin? %>
+            <li><%= link_to "社員一覧", users_path %></li>
+          <% end %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               メニュー <b class="caret"></b>

@@ -8,8 +8,10 @@
           <th>日付</th>
           <th>曜日</th>
           <th>出勤時間</th>
+          <th>休憩IN時間</th>
+          <th>休憩OUT時間</th>
           <th>退勤時間</th>
-          <th>在社時間</th>
+          <th>勤務時間</th>
           <th>備考</th>
         </tr>
       </thead>
@@ -22,9 +24,13 @@
               <% if !current_user.admin? && (Date.current < day.worked_on) %>
                 <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td>
+                <td><%= attendance.time_field :rest_in_at, readonly: true, class: "form-control" %></td>
+                <td><%= attendance.time_field :rest_out_at, readonly: true, class: "form-control" %></td>
               <% else %>
                 <td><%= attendance.time_field :started_at, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+                <td><%= attendance.time_field :rest_in_at, class: "form-control" %></td>
+                <td><%= attendance.time_field :rest_out_at, class: "form-control" %></td>
               <% end %>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
