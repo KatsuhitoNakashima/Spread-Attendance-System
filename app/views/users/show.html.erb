@@ -6,7 +6,9 @@
         <td>
           <%= link_to "←", user_path(date: @first_day.prev_month), class: "btn btn-default" %>
           <%= l(@first_day, format: :middle) %>
-          <%= link_to "勤怠管理表", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-default" %>
+          <% if current_user.admin? %>
+            <%= link_to "勤怠管理表", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-default" %>
+          <% end %>
           <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-default" %>
         </td>
       <td>指定勤務時間：<%= format_basic_info(@user.work_time) %></td>
@@ -43,7 +45,7 @@
       <% @attendances.each do |day| %>
         <tr>
           <td><%= l(day.worked_on, format: :short) %></td>
-          <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+          <td class='<%= "wday#{day.worked_on.wday}"%>'> <%= $days_of_the_week[day.worked_on.wday] %></td>
           <td>
             <% if btn_text = attendance_state(day) %>
               <%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
