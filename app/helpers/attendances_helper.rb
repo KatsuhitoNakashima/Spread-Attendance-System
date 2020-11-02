@@ -18,7 +18,15 @@ module AttendancesHelper
     format("%.2f", (((finish - start) / 60) / 60.0))
   end
   
-  def rest_times(rest_in_at, rest_out_at)
-    format("%.2f", (((rest_out_at - rest_in_at) / 60) / 60.0))
+  def rest_times(rest_in, rest_out)
+    format("%.2f", (((rest_out - rest_in) / 60) / 60.0))
+  end
+  
+  def day_total_working_times(start, finish, rest_in, rest_out)
+    format("%.2f", ((((finish - start) - (rest_out - rest_in)) / 60) / 60.0))
+  end
+  
+  def zangyo_times
+    format("%.2f", ((28800 / 60) /60.0))
   end
 end

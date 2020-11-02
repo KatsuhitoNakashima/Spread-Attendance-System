@@ -22,12 +22,20 @@
               メニュー <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <li><%= link_to "勤怠", current_user %></li>
-              <li><%= link_to "設定", edit_user_path(current_user) %></li>
-              <li class="divider"></li>
-              <li>
-                <%= link_to "ログアウト", logout_path, method: :delete %>
-              </li>
+              <% if current_user.admin? %>
+                <li><%= link_to "スタッフ登録", signup_path %></li>
+                <li><%= link_to "管理者情報の設定", edit_user_path(current_user) %></li>
+                <li class="divider"></li>
+                <li>
+                  <%= link_to "ログアウト", logout_path, method: :delete %>
+                </li>
+              <% else %>
+                <li><%= link_to "勤怠", current_user %></li>
+                <li class="divider"></li>
+                <li>
+                  <%= link_to "ログアウト", logout_path, method: :delete %>
+                </li>
+              <% end %>
             </ul>
           </li>
         <% else %>

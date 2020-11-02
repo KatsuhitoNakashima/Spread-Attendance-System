@@ -20,12 +20,12 @@
 
             <%= f.label :department, class: "label-#{yield(:class_text)}" %>
             <%= f.text_field :department, class: "form-control" %>
-
-            <%= f.label :basic_time, class: "label-#{yield(:class_text)}" %>
-            <%= f.time_field :basic_time, class: "form-control" %>
-
-            <%= f.label :work_time, class: "label-#{yield(:class_text)}" %>
-            <%= f.time_field :work_time, class: "form-control" %>
+            
+            <%= f.label :hourpay, class: "label-#{yield(:class_text)}" %>
+            <%= f.text_field :hourpay, class: "form-control" %>
+            
+            <%= f.label :bikou, class: "label-#{yield(:class_text)}" %>
+            <%= f.text_field :bikou, class: "form-control" %>
 
             <div class="center">
               <%= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)}" %>

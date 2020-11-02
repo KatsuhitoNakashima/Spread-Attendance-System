@@ -4,6 +4,7 @@ class AttendancesController < ApplicationController
   before_action :admin_or_correct_user, only: %i(update edit_one_month update_one_month)
   before_action :set_one_month, only: :edit_one_month
   before_action :admin_user_attendance_edit, only: %i(edit_one_month update_one_month)
+  before_action :keisan, only: %i(edit_one_month)
 
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
 
@@ -36,6 +37,14 @@ class AttendancesController < ApplicationController
         flash[:danger] = UPDATE_ERROR_MSG
       end
     end
+    if @attendance.finished_at.present?
+      @total = @attendance.finished_at
+      @total = (((@total- @attendance.started_at) / 60) / 60.0) 
+      @rest = @attendance.rest_out_at
+      @rest = (((@rest - @attendance.rest_in_at) / 60) / 60.0) 
+      @total = @total - @rest
+      @attendance.update_attributes(day_total_working: @total )
+    end
     redirect_to @user
   end
 
@@ -59,7 +68,7 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :rest_in_at, :rest_out_at, :note])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :rest_in_at, :rest_out_at, :day_total_working, :day_regular_working, :day_over_working, :day_night_working, :note])[:attendances]
     end
     
     # beforeフィルター
@@ -78,6 +87,17 @@ class AttendancesController < ApplicationController
       unless current_user.admin?
         flash[:danger] = "編集権限がありません。"
         redirect_to(root_url)
+      end
+    end
+    
+    def keisan
+      if @attendance.finished_at.present?
+        @total = @attendance.finished_at
+        @total = (((@total- @attendance.started_at) / 60) / 60.0) 
+        @rest = @attendance.rest_out_at
+        @rest = (((@rest - @attendance.rest_in_at) / 60) / 60.0) 
+        @total = @total - @rest
+        @attendance.update_attributes(day_total_working: @total )
       end
     end
 end
